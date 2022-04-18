@@ -2,7 +2,6 @@
   <div id="HomeLogo" class="cen-div">
     <img alt="Vue logo" height="250" width="250" src="../../assets/logo.png">
     <h3>The Book Managment System</h3>
-    
   </div>
 </template>
 

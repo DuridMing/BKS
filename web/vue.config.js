@@ -2,7 +2,7 @@ module.exports = {
     pages: {
         index: {
             // entry for the page
-            entry: "src/views/main.js",
+            entry: "src/main.js",
 
             // the source template
             template: "src/views/templates/index.html",

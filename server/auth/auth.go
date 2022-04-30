@@ -14,6 +14,9 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/joho/godotenv"
 	"github.com/twinj/uuid"
+
+	// local import
+	"server/database/curd"
 )
 
 type User struct {
@@ -36,16 +39,10 @@ type AccessDetails struct {
 	UserId     uint64
 }
 
-var user = User{
-	ID:       1,
-	Username: "test",
-	Password: "test",
-}
-
-
 var rdclient *redis.Client
 
 func init() {
+	// env file loading
 	enverr := godotenv.Load("bkms.env")
 	if enverr != nil {
 		log.Fatal("Error loading .env file", enverr)
@@ -91,29 +88,36 @@ func Test(c *gin.Context) {
 	td.UserID = userId
 	td.Succeed = true
 
-	//you can proceed to save the Todo to a database
-	//but we will just return it to the caller here:
+	// return the status
 	c.JSON(http.StatusCreated, td)
 }
 
 // login func
 func Login(c *gin.Context) {
 	var u User
+	var user map[string]interface{}
+
+	// check the json type
 	if err := c.ShouldBindJSON(&u); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
 		return
 	}
+
+	// find user by username from mongo
+	user = curd.FindUser(u.Username)
+	user_id := uint64(user["userid"].(int32))
+	
 	//compare the user from the request, with the one we defined:
-	if user.Username != u.Username || user.Password != u.Password {
+	if user["username"] != u.Username || user["password"] != u.Password {
 		c.JSON(http.StatusUnauthorized, "Please provide valid login details")
 		return
 	}
-	ts, err := CreateToken(user.ID)
+	ts, err := CreateToken(user_id)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	saveErr := CreateAuth(user.ID, ts)
+	saveErr := CreateAuth(user_id, ts)
 	if saveErr != nil {
 		c.JSON(http.StatusUnprocessableEntity, saveErr.Error())
 	}
@@ -123,6 +127,7 @@ func Login(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, tokens)
 }
+
 func CreateToken(userid uint64) (*TokenDetails, error) {
 	td := &TokenDetails{}
 	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()

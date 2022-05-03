@@ -15,22 +15,31 @@ func main() {
 	router.SetTrustedProxies(nil)
 
 	router.GET("/ping", ping)
-
 	router.POST("/api/test", auth.TokenAuthMiddleware(), auth.Test)
+
 	router.POST("/api/login", auth.Login)
 	router.POST("/api/logout", auth.TokenAuthMiddleware(), auth.Logout)
 	// post the refresh token to refresh the access token
 	router.POST("/api/refresh", auth.Refresh)
 
-	router.POST("/api/bkms/u", curd.FindoneUser)
+	router.POST("/api/bkms/s/name", curd.FindBookbyName)
+	router.POST("/api/bkms/s/author", curd.FindBookbyAuthor)
+	router.POST("/api/bkms/s/isbn", curd.FindBookbyISBN)
 
-	router.GET("/", func(c *gin.Context) {
+	router.POST("/api/bkms/add", curd.AddOneBook)
+	router.POST("/api/bkms/delete", curd.DeleteOneBook)
+	router.POST("/api/bkms/modify", curd.ModifyOneBook)
+
+	// need a func to modify multiple colums in same table
+	// router.POST("/api/bkms/modify/mul")
+
+	router.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "Hello Gin",
+			"title": "Hello BKMS",
 		})
 	})
 
-	router.Run("localhost:13040")
+	router.Run("localhost:3040")
 }
 
 func ping(c *gin.Context) {

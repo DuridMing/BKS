@@ -45,9 +45,9 @@ func init() {
 	// env file loading
 	enverr := godotenv.Load("bkms.env")
 	if enverr != nil {
-		log.Fatal("Error loading .env file", enverr)
+		log.Fatal("auth module Error loading .env file", enverr)
 	} else {
-		log.Print("Success loading .env file")
+		log.Print("auth module Success loading .env file")
 	}
 
 	//Initializing redis

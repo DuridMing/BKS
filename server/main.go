@@ -30,8 +30,6 @@ func main() {
 	router.POST("/api/bkms/delete", curd.DeleteOneBook)
 	router.POST("/api/bkms/modify", curd.ModifyOneBook)
 
-	// need a func to modify multiple colums in same table
-	// router.POST("/api/bkms/modify/mul")
 
 	router.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{
@@ -39,7 +37,7 @@ func main() {
 		})
 	})
 
-	router.Run("localhost:3040")
+	router.Run("localhost:13040")
 }
 
 func ping(c *gin.Context) {

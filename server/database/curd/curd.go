@@ -250,9 +250,8 @@ func DeleteOneBook(c *gin.Context) {
 
 func ModifyOneBook(c *gin.Context) {
 	type BookModifyStruct struct {
-		ID    primitive.ObjectID `json:"id"`
-		Key   string             `json:"key"`
-		Value string             `json:"value"`
+		ID         primitive.ObjectID `json:"id"`
+		ModifyItem bson.M             `json:"modifyItem"`
 	}
 	type BookModifyResponse struct {
 		ID      string `json:"id"`
@@ -274,7 +273,7 @@ func ModifyOneBook(c *gin.Context) {
 	collection = client.Database(database).Collection("book")
 	filter := bson.M{"_id": modifyBook.ID}
 	updatedoc := bson.D{
-		{"$set", bson.D{{Key: modifyBook.Key, Value: modifyBook.Value}}},
+		{"$set", modifyBook.ModifyItem},
 	}
 	result, err := collection.UpdateOne(context.TODO(), filter, updatedoc)
 	if err != nil {

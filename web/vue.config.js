@@ -16,14 +16,8 @@ module.exports = {
 
             // chunks to include on this page, by default includes
             // extracted common chunks and vendor chunks.
-            // chunks: ["chunk-vendors", "chunk-common", "index"]
+            chunks: ["chunk-vendors", "chunk-common", "index"]
         },
-        login:{
-          entry: "src/login/login.js",
-          template: "src/views/login.html",
-          filename: "login.html",
-          title: "Login"
 
-        }
     }
 };

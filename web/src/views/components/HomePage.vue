@@ -1,13 +1,20 @@
 <template>
-  <div id="HomeLogo" class="cen-div">
-    <img alt="Vue logo" height="250" width="250" src="../../assets/logo.png">
-    <h3>The Book Managment System</h3>
+  <navbar></navbar>
+  <div class="container">
+    <div id="HomeLogo" class="cen-div">
+      <img alt="Vue logo" height="250" width="250" src="../../assets/logo.png">
+      <h3>The Book Managment System</h3>
+    </div>
   </div>
 </template>
 
 <script>
+import navbar from "./NavBar.vue"
 export default {
   name: 'HelloWorld',
+  components:{
+    navbar
+  },
   props: {
     msg: String
   }
@@ -19,7 +26,6 @@ export default {
 h3 {
   margin: 35px 0 0;
 }
-
 .cen-div {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -1,22 +1,15 @@
 <template>
-  <navbar></navbar>
-  <div class="container">
-    <router-view></router-view>
-  </div>
-
+  <router-view></router-view>
 </template>
 
 <script>
-import navbar from "./components/NavBar";
 
 export default {
   name: 'App',
   components: {
-    navbar,
   }
 }
 </script>
 
 <style>
-
 </style>

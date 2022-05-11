@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"encoding/base64"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v7"
@@ -106,10 +109,18 @@ func Login(c *gin.Context) {
 	// find user by username from mongo
 	user = curd.FindUser(u.Username)
 	user_id := uint64(user["userid"].(int32))
-	
+	decodePassword, err := base64.StdEncoding.DecodeString(string(u.Password))
+	if err != nil {
+		log.Printf("Error decoding password.")
+	}
 	//compare the user from the request, with the one we defined:
-	if user["username"] != u.Username || user["password"] != u.Password {
+	if user["username"] != u.Username {
 		c.JSON(http.StatusUnauthorized, "Please provide valid login details")
+		return
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(user["password"].(string)), []byte(decodePassword))
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, "Password Error")
 		return
 	}
 	ts, err := CreateToken(user_id)
@@ -260,7 +271,9 @@ func DeleteAuth(givenUuid string) (int64, error) {
 
 func Logout(c *gin.Context) {
 	au, err := ExtractTokenMetadata(c.Request)
+	fmt.Println(c)
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusUnauthorized, "unauthorized")
 		return
 	}

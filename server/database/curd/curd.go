@@ -42,7 +42,6 @@ func FindUser(UserName string) (result map[string]interface{}) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer mcli.Disconnect(client)
 
 	return result
 }

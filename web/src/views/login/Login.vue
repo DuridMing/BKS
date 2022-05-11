@@ -6,20 +6,22 @@
         </div>
         <div class="box-cen">
             <div class="pas-div shadow-cus">
+              <span style="padding-bottom: 10px;">{{ login_error_message }}</span>
                 <div class="mb-3 row">
-                  <label  class="col-sm-2 col-form-label">Account</label>
+                  <label  class="col-sm-2 col-form-label" >Account</label>
                   <div class="col-sm-10">
-                    <input type="password" class="form-control" id="inputAccount">
+                    <input  class="form-control" id="inputAccount" v-model.lazy="Account">
                   </div>
                 </div>
                 <div class="mb-3 row">
                   <label  class="col-sm-2 col-form-label">Password</label>
                   <div class="col-sm-10">
-                    <input type="password" class="form-control" id="inputPassword">
+                    <input type="password" class="form-control" id="inputPassword" v-model.lazy="Password">
                   </div>
                 </div>
-                <button class="btn btn-primary" type="submit">
-                  <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                <button class="btn btn-primary" @click="login(Account , Password)">
+                  <font-awesome-icon icon="arrow-right-to-bracket" />
+                  <span >&nbsp;</span>
                   Login
                 </button>
             </div> 
@@ -30,8 +32,53 @@
 </template>
 
 <script>
+import store from "../../store"
+import authcrypto from "./auth"
+import axios from "axios"
+
 export default {
-  name: 'LoginItem'
+  name: 'LoginPage',
+  data () {
+    return {
+      Account: "",
+      Password: "",
+      login_error_message: "",
+    }
+  },
+  methods:{
+    login(Account, Password) {
+      var url = '/api/login';
+      let hashPassword = authcrypto.encrypt(Password);
+      var data = this;
+      axios.post(url ,
+        {username:Account , password:hashPassword})
+        .then( function (responce){
+          var access_token = responce.data.access_token;
+          store.state.accessToken = access_token;
+          var refresh_token = responce.data.refresh_token;
+          store.state.refreshToken = refresh_token;
+          store.state.isAuthenticated = true;
+          store.state.userName = Account;
+          console.log(store.state.userName);
+          data.$router.push({name: 'home'});
+        })
+        .catch( function (error){
+          console.log(error);
+          console.log(error.response.status);
+          console.log(error.response.data);
+          if (error.response.status  == 422){
+            data.login_error_message = error.response.data;
+          }
+          if ( error.response.status == 401){
+            data.login_error_message = error.response.data;
+          }
+        });
+    }
+    
+  },
+  computed:{
+    
+  }
 }
 </script>
 
@@ -58,6 +105,6 @@ export default {
 }
 .pas-div{
   background-color: white;
-  padding:30px 10px 20px 10px;
+  padding:25px 10px 20px 10px;
 }
 </style>

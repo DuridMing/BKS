@@ -1,9 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import home from '../views/components/HomePage.vue'
-import Dashboard from '../views/components/DashboardItem.vue'
-import Search from "../views/components/SearchItem.vue";
+import home from '../views/pages/HomePage.vue'
 import NotFound from '../views/NotFound.vue'
 import Login from "../views/login/Login.vue"
+
+import Dashboard from '../views/pages/DashPage.vue'
+import Search from "../views/pages/SearchPage.vue";
+
+import store from "../store"
 
 
 const routes = [
@@ -40,8 +43,16 @@ const routes = [
   }
 ]
 
-export const Routers = createRouter({
+const Routers = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
+
+Routers.beforeEach((to) => {
+  if (to.name != 'login' && !store.state.isAuthenticated){
+    return {name: 'login'}
+  }
+});
+
+export {Routers}
 

@@ -14,7 +14,7 @@ func main() {
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
 
-	router.GET("/ping", ping)
+	router.GET("/api/ping", ping)
 	router.POST("/api/test", auth.TokenAuthMiddleware(), auth.Test)
 
 	router.POST("/api/login", auth.Login)
@@ -30,14 +30,13 @@ func main() {
 	router.POST("/api/bkms/delete", curd.DeleteOneBook)
 	router.POST("/api/bkms/modify", curd.ModifyOneBook)
 
-
 	router.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"title": "Hello BKMS",
 		})
 	})
 
-	router.Run("localhost:13040")
+	router.Run("localhost:3040")
 }
 
 func ping(c *gin.Context) {

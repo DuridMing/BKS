@@ -19,5 +19,26 @@ module.exports = {
             chunks: ["chunk-vendors", "chunk-common", "index"]
         },
 
+    },
+    configureWebpack: {
+        resolve:{
+            alias:{
+                crypto: false
+            },
+        },
+    },
+    devServer:{
+        host:'localhost',
+        port:'3041',
+        proxy:{
+            '/api':{
+                target: 'http://localhost:3040/api',
+                changeOrgin: true,
+                pathRewrite:{
+                    '^/api':'',
+                }
+   
+            }
+        }
     }
 };

@@ -21,12 +21,10 @@
             <span >
               <div class="btn-group">
                     <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                        Login
+                        {{ UserNameCatch }}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-lg-end">
-                        <li><button class="dropdown-item" type="button">Action</button></li>
-                        <li><button class="dropdown-item" type="button">Another action</button></li>
-                        <li><button class="dropdown-item" type="button">Something else here</button></li>
+                        <li><button class="dropdown-item" type="button" @click="Logout">Logout</button></li>
                     </ul>
                 </div>
             </span>
@@ -36,8 +34,35 @@
 </template>
 
 <script>
+import store from "../../store"
+import axios from "axios"
 export default {
     name: 'NavBar',
+    data () {
+        return {
+            username: store.state.userName,
+        }
+        
+    },
+    methods: {
+        Logout(){
+            var token = store.state.accessToken;
+            axios.post('/api/logout' ,{},
+            { headers: { 'Authorization': `Bearer ${token}`}
+            }).then((response) =>{
+                console.log(response.data);
+                this.$router.push({name:'login'});
+            }).catch((error) =>{
+                console.log(error);
+            })
+        },
+
+    },
+    computed:{
+        UserNameCatch(){
+            return this.username;
+        }
+    }
 }
 </script>
 

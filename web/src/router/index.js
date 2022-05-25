@@ -3,10 +3,10 @@ import home from '../views/pages/HomePage.vue'
 import NotFound from '../views/NotFound.vue'
 import Login from "../views/login/Login.vue"
 
-import Dashboard from '../views/pages/DashPage.vue'
+import AddBook from '../views/pages/AddBookPage.vue'
 import Search from "../views/pages/SearchPage.vue";
 
-import store from "../store"
+// import store from "../store"
 
 
 const routes = [
@@ -31,9 +31,9 @@ const routes = [
     component: Search
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: Dashboard
+    path: '/addbook',
+    name: 'addbook',
+    component: AddBook
   },
   // the last router rule.
   {
@@ -48,11 +48,11 @@ const Routers = createRouter({
   routes
 });
 
-Routers.beforeEach((to) => {
-  if (to.name != 'login' && !store.state.isAuthenticated){
-    return {name: 'login'}
-  }
-});
+// Routers.beforeEach((to) => {
+//   if (to.name != 'login' && !store.state.isAuthenticated){
+//     return {name: 'login'}
+//   }
+// });
 
 export {Routers}
 

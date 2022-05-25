@@ -11,6 +11,7 @@ const store = createStore({
             refreshToken:'',
             userName:'',
             isAuthenticated : false,
+            bookSearchResult :[],
         },
         plugins: [
             createPersistedState()

@@ -1,13 +1,56 @@
 <template>
-
-    <h1>search</h1>
-
+    <nav class="navbar navbar-expand-lg navbar-light bg-white ">
+      <div class="input-group cen-div">
+        <select class="form-select" id="SearchMethodSelect" aria-label="Default select example" v-model="Searchtype">
+          <option selected>Search</option>
+          <option value="Name">Book</option>
+          <option value="Author">Author</option>
+        </select>
+        <input type="text" id="SearchInput" v-model="searchInput" class="form-control w-50">
+        <button class="btn btn-outline-success" type="button" id="BookSearch" @click="Search(Searchtype,searchInput)">Search</button>
+      </div>
+    </nav>
 </template>
 
 <script>
+import store from "../../store"
+import axios from "axios"
 export default {
     name: 'SearchItem',
-
+    data () {
+      return {
+        Searchtype: "Search",
+        searchInput: ""
+      }
+    },
+    methods:{
+      Search (Searchtype , searchInput){
+        var url ="/api/bkms/s"
+          console.log(Searchtype);
+          console.log(searchInput);
+          url = url +"/"+Searchtype.toLowerCase();
+          console.log(url);
+          if (Searchtype.toLowerCase() == "name"){
+              axios.post(url ,
+                {name: searchInput})
+                .then( function (responce){
+                    store.state.bookSearchResult = responce.data;
+                })
+                .catch( function (error){
+                  console.log(error);
+              });
+          }else if (Searchtype.toLowerCase() == "author"){
+            axios.post(url ,
+                {author: searchInput})
+                .then( function (responce){
+                    store.state.bookSearchResult = responce.data;
+                })
+                .catch( function (error){
+                  console.log(error);
+                });
+            }
+      }
+    }
 }
 </script>
 
@@ -18,6 +61,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 20px;
+  margin: 1px 270px 
 }
 </style>

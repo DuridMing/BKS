@@ -1,31 +1,33 @@
 <template>
     <navbar></navbar>
+    <search></search>
     <div class="container">
-        <div class="cen-div">
-            <search></search>
-        </div>
+      <div class="table-div">
+        <bookresult></bookresult>
+      </div>
     </div>
 </template>
 
 <script>
 import navbar from "../components/NavBar.vue"
 import search from "../components/SearchItem.vue"
+import bookresult from "../components/BookResultItem.vue"
 export default {
   name: 'SearchPage',
   components: {
       navbar,
-      search
+      search,
+      bookresult
   }
 }
 </script>
 
 <style scoped>
-.cen-div {
+.table-div{
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 20px;
+  margin: 10px 0px;
 }
 </style>

@@ -163,11 +163,11 @@ func FindBookbyISBN(c *gin.Context) {
 
 func AddOneBook(c *gin.Context) {
 	type BookInsertStructure struct {
-		ISBN   string `json:"isbn"`
 		Name   string `json:"name"`
 		Author string `json:"author"`
 		EP     string `json:"ep"`
 		End    bool   `json:"end"`
+		Type   string `json:"type"`
 	}
 	type Req struct {
 		Success bool   `json:"success"`
@@ -184,18 +184,12 @@ func AddOneBook(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
 		return
 	}
-	if len(insertBook.ISBN) != 10 && len(insertBook.ISBN) != 13 {
-		sucreq.Success = false
-		sucreq.Message = "ISBN format error."
-		c.JSON(http.StatusUnprocessableEntity, sucreq)
-		return
-	}
 	collection = client.Database(database).Collection("book")
 	docs := bson.D{
-		{Key: "ISBN", Value: insertBook.ISBN},
 		{Key: "name", Value: insertBook.Name},
 		{Key: "author", Value: insertBook.Author},
 		{Key: "ep", Value: insertBook.EP},
+		{Key: "type", Value: insertBook.Type},
 		{Key: "end", Value: insertBook.End},
 	}
 	result, err := collection.InsertOne(context.TODO(), docs)
@@ -203,7 +197,7 @@ func AddOneBook(c *gin.Context) {
 		log.Fatal(err)
 	}
 	sucreq.Success = true
-	sucreq.Message = fmt.Sprintf("Insert ID:%v", result.InsertedID)
+	sucreq.Message = fmt.Sprintf("Add Book ID:%v", result.InsertedID)
 
 	c.JSON(http.StatusOK, sucreq)
 

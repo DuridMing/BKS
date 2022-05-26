@@ -26,10 +26,7 @@ export default {
     methods:{
       Search (Searchtype , searchInput){
         var url ="/api/bkms/s"
-          console.log(Searchtype);
-          console.log(searchInput);
           url = url +"/"+Searchtype.toLowerCase();
-          console.log(url);
           if (Searchtype.toLowerCase() == "name"){
               axios.post(url ,
                 {name: searchInput})

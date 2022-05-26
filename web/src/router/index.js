@@ -6,7 +6,7 @@ import Login from "../views/login/Login.vue"
 import AddBook from '../views/pages/AddBookPage.vue'
 import Search from "../views/pages/SearchPage.vue";
 
-// import store from "../store"
+import store from "../store"
 
 
 const routes = [
@@ -48,11 +48,11 @@ const Routers = createRouter({
   routes
 });
 
-// Routers.beforeEach((to) => {
-//   if (to.name != 'login' && !store.state.isAuthenticated){
-//     return {name: 'login'}
-//   }
-// });
+Routers.beforeEach((to) => {
+  if (to.name != 'login' && !store.state.isAuthenticated){
+    return {name: 'login'}
+  }
+});
 
 export {Routers}
 

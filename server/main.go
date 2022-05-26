@@ -22,13 +22,13 @@ func main() {
 	// post the refresh token to refresh the access token
 	router.POST("/api/refresh", auth.Refresh)
 
-	router.POST("/api/bkms/s/name", curd.FindBookbyName)
-	router.POST("/api/bkms/s/author", curd.FindBookbyAuthor)
-	router.POST("/api/bkms/s/isbn", curd.FindBookbyISBN)
+	router.POST("/api/bkms/s/name" , auth.TokenAuthMiddleware(), curd.FindBookbyName)
+	router.POST("/api/bkms/s/author", auth.TokenAuthMiddleware(), curd.FindBookbyAuthor)
+	router.POST("/api/bkms/s/isbn", auth.TokenAuthMiddleware(), curd.FindBookbyISBN)
 
-	router.POST("/api/bkms/add", curd.AddOneBook)
-	router.POST("/api/bkms/delete", curd.DeleteOneBook)
-	router.POST("/api/bkms/modify", curd.ModifyOneBook)
+	router.POST("/api/bkms/add", auth.TokenAuthMiddleware(), curd.AddOneBook)
+	router.POST("/api/bkms/delete", auth.TokenAuthMiddleware(), curd.DeleteOneBook)
+	router.POST("/api/bkms/modify", auth.TokenAuthMiddleware(), curd.ModifyOneBook)
 
 	router.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{

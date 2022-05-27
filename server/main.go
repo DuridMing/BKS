@@ -22,7 +22,7 @@ func main() {
 	// post the refresh token to refresh the access token
 	router.POST("/api/refresh", auth.Refresh)
 
-	router.POST("/api/bkms/s/name" , auth.TokenAuthMiddleware(), curd.FindBookbyName)
+	router.POST("/api/bkms/s/name", auth.TokenAuthMiddleware(), curd.FindBookbyName)
 	router.POST("/api/bkms/s/author", auth.TokenAuthMiddleware(), curd.FindBookbyAuthor)
 	router.POST("/api/bkms/s/isbn", auth.TokenAuthMiddleware(), curd.FindBookbyISBN)
 
@@ -36,7 +36,7 @@ func main() {
 		})
 	})
 
-	router.Run("localhost:3040")
+	router.Run(":3040")
 }
 
 func ping(c *gin.Context) {

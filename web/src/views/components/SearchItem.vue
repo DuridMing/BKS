@@ -26,11 +26,13 @@ export default {
     methods:{
       Search (Searchtype , searchInput){
         var url ="/api/bkms/s"
+        var token = store.state.accessToken;
           url = url +"/"+Searchtype.toLowerCase();
           if (Searchtype.toLowerCase() == "name"){
               axios.post(url ,
-                {name: searchInput})
-                .then( function (responce){
+                {name: searchInput},
+                { headers: { 'Authorization': `Bearer ${token}`}
+                }).then( function (responce){
                     store.state.bookSearchResult = responce.data;
                 })
                 .catch( function (error){
@@ -38,8 +40,9 @@ export default {
               });
           }else if (Searchtype.toLowerCase() == "author"){
             axios.post(url ,
-                {author: searchInput})
-                .then( function (responce){
+                {author: searchInput},
+                { headers: { 'Authorization': `Bearer ${token}`}
+                }).then( function (responce){
                     store.state.bookSearchResult = responce.data;
                 })
                 .catch( function (error){

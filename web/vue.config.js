@@ -32,7 +32,7 @@ module.exports = {
         port:'3041',
         proxy:{
             '/api':{
-                target: 'http://localhost:3040/api',
+                target: 'http://go-server:3040/api',
                 changeOrgin: true,
                 pathRewrite:{
                     '^/api':'',

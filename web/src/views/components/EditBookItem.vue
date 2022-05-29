@@ -92,11 +92,11 @@ export default {
             editsucessinfo:'',
             editinfo:'',
             EdititemMessage:{
-                name : this.$props.itemMessage.name,
-                author : this.$props.itemMessage.author,
-                ep : this.$props.itemMessage.ep,
-                type : this.$props.itemMessage.type,
-                end : this.$props.itemMessage.end,
+                name : "",
+                author : "",
+                ep : "",
+                type : "",
+                end : "",
             }
         }
     },
@@ -109,6 +109,15 @@ export default {
     methods: {
         Modify(){
             var token = store.state.accessToken;
+
+            for (const key in this.EdititemMessage){
+                if (this.EdititemMessage[key] === ""){
+                    this.EdititemMessage[key] = this.$props.itemMessage[key];
+                }
+            }
+
+            console.log(this.EdititemMessage);
+
             axios.post('/api/bkms/modify' ,
             {
                 id : this.$props.itemMessage._id,
